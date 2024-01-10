@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz ¸ñ·Ï</title>
+    <title>Quiz ëª©ë¡</title>
     <style>
         
         body{
@@ -29,25 +29,25 @@
     </style>
 </head>
 <body>
-    <h1>Quiz ¸ñ·Ï</h1>
+    <h1>Quiz ëª©ë¡</h1>
     <ul id="quizList"></ul>
 
     <script>
-        // ¼­¹ö·ÎºÎÅÍ Quiz ¸ñ·ÏÀ» °¡Á®¿Í¼­ HTML¿¡ Ãß°¡ÇÏ´Â ÇÔ¼ö
+        // ì„œë²„ë¡œë¶€í„° Quiz ëª©ë¡ì„ ê°€ì ¸ì™€ì„œ HTMLì— ì¶”ê°€í•˜ëŠ” í•¨ìˆ˜
         async function loadQuizList() {
             try {
-                const response = await fetch('/api/quiz'); // ¹é¿£µå¿¡¼­ Quiz ¸ñ·ÏÀ» °¡Á®¿À´Â API endpoint
+                const response = await fetch('/api/quiz'); // ë°±ì—”ë“œì—ì„œ Quiz ëª©ë¡ì„ ê°€ì ¸ì˜¤ëŠ” API endpoint
                 const quizList = await response.json();
 
                 const quizListContainer = document.getElementById('quizList');
 
-                // Quiz ¸ñ·ÏÀ» µ¹¸é¼­ °¢°¢ÀÇ Quiz¿¡ ´ëÇÑ µµÀü ¹öÆ°À» »ı¼º
+                // Quiz ëª©ë¡ì„ ëŒë©´ì„œ ê°ê°ì˜ Quizì— ëŒ€í•œ ë„ì „ ë²„íŠ¼ì„ ìƒì„±
                 quizList.forEach(quiz => {
                     const li = document.createElement('li');
                     li.innerHTML = `<strong>${quiz.title}</strong> - ${quiz.description} `;
                     
                     const challengeButton = document.createElement('button');
-                    challengeButton.textContent = 'µµÀüÇÏ±â';
+                    challengeButton.textContent = 'ë„ì „í•˜ê¸°';
                     challengeButton.addEventListener('click', () => startChallenge(quiz.id));
 
                     li.appendChild(challengeButton);
@@ -58,13 +58,13 @@
             }
         }
 
-        // ÄûÁî µµÀü ¹öÆ°À» ´©¸¦ ¶§ÀÇ µ¿ÀÛÀ» Á¤ÀÇÇÏ´Â ÇÔ¼ö
+        // í€´ì¦ˆ ë„ì „ ë²„íŠ¼ì„ ëˆ„ë¥¼ ë•Œì˜ ë™ì‘ì„ ì •ì˜í•˜ëŠ” í•¨ìˆ˜
         function startChallenge(quizId) {
-            // µµÀü ¹öÆ°À» ´©¸¦ ¶§ÀÇ µ¿ÀÛÀ» ¿©±â¿¡ Ãß°¡
-            alert(`µµÀüÀ» ½ÃÀÛÇÕ´Ï´Ù! Quiz ID: ${quizId}`);
+            // ë„ì „ ë²„íŠ¼ì„ ëˆ„ë¥¼ ë•Œì˜ ë™ì‘ì„ ì—¬ê¸°ì— ì¶”ê°€
+            alert(`ë„ì „ì„ ì‹œì‘í•©ë‹ˆë‹¤! Quiz ID: ${quizId}`);
         }
 
-        // ÆäÀÌÁö ·Îµå ½Ã Quiz ¸ñ·ÏÀ» °¡Á®¿À´Â ÇÔ¼ö È£Ãâ
+        // í˜ì´ì§€ ë¡œë“œ ì‹œ Quiz ëª©ë¡ì„ ê°€ì ¸ì˜¤ëŠ” í•¨ìˆ˜ í˜¸ì¶œ
         window.addEventListener('load', loadQuizList);
     </script>
 </body>

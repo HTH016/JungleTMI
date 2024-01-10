@@ -9,7 +9,7 @@ client = MongoClient('localhost', 27017)
 db = client.dbjungle
 
 
-# API #1: HTML Æ²(template) Àü´Ş
+# API #1: HTML í‹€(template) ì „ë‹¬
 @app.route('/')
 def main():
     if 'member_id' in session:
@@ -20,62 +20,62 @@ def main():
         #return redirect('/main')
 
 
-#API #: È¸¿ø°¡ÀÔ ÆäÀÌÁö ·Îµå 
+#API #: íšŒì›ê°€ì… í˜ì´ì§€ ë¡œë“œ 
 @app.route('/signup', methods=['GET'])
 def sign_up():
 
     return render_template('signup.html')
 
 
-#API # : È¸¿ø°¡ÀÔ ÀÔ·Â 
+#API # : íšŒì›ê°€ì… ì…ë ¥ 
 @app.route('/signup', methods=['POST'])
 def join_member():
     
-    #HTML·ÎºÎÅÍ ¹Ş´Â Á¤º¸ 
+    #HTMLë¡œë¶€í„° ë°›ëŠ” ì •ë³´ 
     member_id = request.form['username']
     member_passwd = request.form['password']
     member_name = request.form['fullname']
     print(member_id, member_passwd, member_name)
     
-    # ÃÊ±â Æ÷ÀÎÆ®´Â ÃßÈÄ °áÁ¤ ¿¹Á¤
+    # ì´ˆê¸° í¬ì¸íŠ¸ëŠ” ì¶”í›„ ê²°ì • ì˜ˆì •
     member_point = 1000
     
-    # DB member ÄÃ·º¼Ç¿¡ Ãß°¡ 
+    # DB member ì»¬ë ‰ì…˜ì— ì¶”ê°€ 
     insert_dict = {'id':member_id, 'password':member_passwd, 'name':member_name, 'point':member_point}
     db.users.insert_one(insert_dict)
     
     #return jsonify({'result': 'success'})
     return redirect('/')
 
-#API # È¸¿ø°¡ÀÔ ¾ÆÀÌµğ Áßº¹ °Ë»ç
+#API # íšŒì›ê°€ì… ì•„ì´ë”” ì¤‘ë³µ ê²€ì‚¬
 @app.route('/join/confirm', methods=['POST'])
 def join_confirm():
-    #¾ÆÀÌµğ Áßº¹È®ÀÎ ¹öÆ° Å¬¸¯À» ÇÏ¸é ÀÔ·Â ÅØ½ºÆ®¸¦ ³Ñ°Ü¹Ş´Â´Ù.
+    #ì•„ì´ë”” ì¤‘ë³µí™•ì¸ ë²„íŠ¼ í´ë¦­ì„ í•˜ë©´ ì…ë ¥ í…ìŠ¤íŠ¸ë¥¼ ë„˜ê²¨ë°›ëŠ”ë‹¤.
     confirm_id = request.form['member_id']
     exist = bool(db.users.find_one({'_id', confirm_id}))
     return jsonify({'result':'success', 'exist':exist})
 
-#API # : ·Î±×ÀÎ 
+#API # : ë¡œê·¸ì¸ 
 @app.route('/login', methods=['POST'])
 def login():
     
-    #HTML·ÎºÎÅÍ ¹Ş´Â Á¤º¸ 
+    #HTMLë¡œë¶€í„° ë°›ëŠ” ì •ë³´ 
     login_id = request.form['username']
     login_passwd = request.form['password']
      
-    # DB·ÎºÎÅÍ È¸¿ø ´ëÁ¶  
+    # DBë¡œë¶€í„° íšŒì› ëŒ€ì¡°  
     login_dict = {'id':login_id, 'password':login_passwd}
     result = db.users.find_one(login_dict)
     
     if result is not None:
-    #·Î±×ÀÎ ¼º°ø
+    #ë¡œê·¸ì¸ ì„±ê³µ
         session['member_id'] = login_id
         print(session['member_id'], file=sys.stderr)
         print('login_id', session['member_id'], file=sys.stderr)
         return redirect('/main')
         #return render_template('hub.html', member_id=session['member_id'])
         
-    #·Î±×ÀÎ ½ÇÆĞ 
+    #ë¡œê·¸ì¸ ì‹¤íŒ¨ 
     else:
         return redirect('/')
 
@@ -85,7 +85,7 @@ def hub():
     return render_template('hub.html', member_id=member_id)
 
 
-#API # : ·Î±×¾Æ¿ô
+#API # : ë¡œê·¸ì•„ì›ƒ
 @app.route('/logout', methods=['GET'])
 def logout():
     
@@ -93,23 +93,23 @@ def logout():
     return redirect('/')
 
 
-#API #: ÃâÁ¦ ÆäÀÌÁö ·Îµå 
+#API #: ì¶œì œ í˜ì´ì§€ ë¡œë“œ 
 @app.route('/quizgenerator', methods=['GET'])
 def insert_quiz():
 
-    #È¸¿ø id¸¦ ¹Ş´Â´Ù.
+    #íšŒì› idë¥¼ ë°›ëŠ”ë‹¤.
     member_id = session['member_id']
-    print("ÃâÁ¦ ÆäÀÌÁö ·Îµå", file=sys.stderr)
+    print("ì¶œì œ í˜ì´ì§€ ë¡œë“œ", file=sys.stderr)
     return render_template('quizgenerator.html', member_id=member_id)
 
 
-#API #: ÃâÁ¦ ÄûÁî Á¦Ãâ 
+#API #: ì¶œì œ í€´ì¦ˆ ì œì¶œ 
 @app.route('/quiz/submit', methods=['POST'])
 def submit_quiz():
     
     member_id = session['member_id']
     
-    #HTML·ÎºÎÅÍ ¹Ş´Â Á¤º¸ 
+    #HTMLë¡œë¶€í„° ë°›ëŠ” ì •ë³´ 
     quiz_content = request.form['quiz_content']
     quiz_choice_1 = request.form['quiz_choice_1']
     quiz_choice_2 = request.form['quiz_choice_2']
@@ -117,10 +117,10 @@ def submit_quiz():
     quiz_choice_4 = request.form['quiz_choice_4']
     quiz_answer = request.form['quiz_answer']
     
-    #ÄûÁî ¹øÈ£ »ı¼º
+    #í€´ì¦ˆ ë²ˆí˜¸ ìƒì„±
     quiz_cnt = db.quizzes.count()
     
-    # DB member ÄÃ·º¼Ç¿¡ Ãß°¡ 
+    # DB member ì»¬ë ‰ì…˜ì— ì¶”ê°€ 
     insert_dict = {
         'id': quiz_cnt,
         'submit_id':member_id,
