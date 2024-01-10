@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>출제 페이지 - JUNGLE TMI</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;/* 수평 방향 */
+            align-items:center;/* 수직 방향 */
+            height: 100vh;
+            background-color: beige;
+        }
+
+        h1 {
+            font-size: 50px;
+            color: #008000;
+            margin: 20px 0;
+        }
+
+        .question-input {
+            width: 80%;
+            height: 100px;
+            padding: 10px;
+            margin: 20px 0;
+            box-sizing: border-box;
+        }
+
+        .options-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .option-container {
+            width: calc(50% - 5px);
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .option-description {
+            width: 100%;
+            height: 50px;
+            padding: 10px; 
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        .radio-input {
+            margin-right: 5px;
+        }
+
+        .submit-button {
+            width: 150px;
+            height: 40px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>JUNGLE TMI - 출제 페이지</h1>
+
+    <textarea class="question-input" placeholder="질문을 입력하세요..."></textarea>
+
+    <div class="options-container">
+        <div class="option-container">
+            <textarea class="option-description" placeholder="보기 1 설명"></textarea>
+            <input type="radio" name="option" class="radio-input">
+        </div>
+        <div class="option-container">
+            <textarea class="option-description" placeholder="보기 2 설명"></textarea>
+            <input type="radio" name="option" class="radio-input">
+        </div>
+        <div class="option-container">
+            <textarea class="option-description" placeholder="보기 3 설명"></textarea>
+            <input type="radio" name="option" class="radio-input">
+        </div>
+        <div class="option-container">
+            <textarea class="option-description" placeholder="보기 4 설명"></textarea>
+            <input type="radio" name="option" class="radio-input">
+        </div>
+    </div>
+
+    <button class="submit-button" onclick="submitQuestion()">제출</button>
+
+    <script>
+        async function submitQuestion() {
+            const questionInput = document.querySelector('.question-input').value;
+            const options = document.querySelectorAll('.option-description');
+    
+            if (!questionInput || !options || !options.length) {
+                alert("질문과 보기를 모두 채워주세요.");
+                return;
+            }
+    
+            const data = {
+                question: questionInput,
+                options: Array.from(options).map(option => option.value)
+            };
+    
+            try {
+                const response = await fetch('/api/submit_question', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+    
+                if (response.ok) {
+                    alert("문제가 성공적으로 제출되었습니다.");
+                } else {
+                    alert("문제 제출에 실패했습니다.");
+                }
+            } catch (error) {
+                console.error('Error submitting question:', error);
+            }
+        }
+    </script>
+    
+</body>
+</html>
