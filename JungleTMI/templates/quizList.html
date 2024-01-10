@@ -1,35 +1,71 @@
 <!DOCTYPE html>
-<html lang="ko">
-    <head>
-        <meta charset="UTF-8"/>
-        <meta title="viewport" content="width=device-width, initial-scale=1.0"/>
-
-        <!-- Bootstrap -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz 목록</title>
+    <style>
         
+        body{
+            background-color:beige;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
 
-        <!-- jQuery -->
-        
+        li {
+            margin-bottom: 10px;
+        }
 
-        <!-- CSS  Bulma -->
-        
+        button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Quiz 목록</h1>
+    <ul id="quizList"></ul>
 
-        <!--  Font awesome  -->
-        
+    <script>
+        // 서버로부터 Quiz 목록을 가져와서 HTML에 추가하는 함수
+        async function loadQuizList() {
+            try {
+                const response = await fetch('/api/quiz'); // 백엔드에서 Quiz 목록을 가져오는 API endpoint
+                const quizList = await response.json();
 
-        <title>QuizList</title>
+                const quizListContainer = document.getElementById('quizList');
 
-        <style>
-            
+                // Quiz 목록을 돌면서 각각의 Quiz에 대한 도전 버튼을 생성
+                quizList.forEach(quiz => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<strong>${quiz.title}</strong> - ${quiz.description} `;
+                    
+                    const challengeButton = document.createElement('button');
+                    challengeButton.textContent = '도전하기';
+                    challengeButton.addEventListener('click', () => startChallenge(quiz.id));
 
-        </style>
+                    li.appendChild(challengeButton);
+                    quizListContainer.appendChild(li);
+                });
+            } catch (error) {
+                console.error('Error loading quiz list:', error);
+            }
+        }
 
-        <script>
-            
-        </script>
-    </head>
+        // 퀴즈 도전 버튼을 누를 때의 동작을 정의하는 함수
+        function startChallenge(quizId) {
+            // 도전 버튼을 누를 때의 동작을 여기에 추가
+            alert(`도전을 시작합니다! Quiz ID: ${quizId}`);
+        }
 
-
-    <body>
-        
-    </body>
+        // 페이지 로드 시 Quiz 목록을 가져오는 함수 호출
+        window.addEventListener('load', loadQuizList);
+    </script>
+</body>
 </html>
