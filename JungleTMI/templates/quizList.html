@@ -1,71 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz 목록</title>
-    <style>
-        
-        body{
-            background-color:beige;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        li {
-            margin-bottom: 10px;
-        }
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #f5f5dc;
+    }
 
-        button {
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-    </style>
+    .header {
+      background-color: beige;
+      color: #008000;;
+      text-align: center;
+      padding: 10px;
+      position: relative;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 50px;
+    }
+
+    .buttons-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      text-align: center;
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 20px;
+    }
+
+    .additional-buttons {
+      display: flex;
+      justify-content: space-around;
+      margin: 20px 420px;
+
+    }
+
+    .box {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      margin: 20px auto;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      /* 수정된 부분 */
+    }
+
+    .box h2 {
+      margin-bottom: 10px;
+    }
+
+    .box p {
+      margin: 5px 0;
+    }
+
+    .box .challenge-button {
+      margin-top: auto;
+    }
+
+    .button {
+      background-color: #008000;
+      /* 초록색 버튼 */
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .button-inactive {
+      background-color: #004000;
+      /* 초록색 버튼 */
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+  </style>
+  <title>JUNGLE TMI - 퀴즈 리스트</title>
 </head>
+
 <body>
-    <h1>Quiz 목록</h1>
-    <ul id="quizList"></ul>
 
-    <script>
-        // 서버로부터 Quiz 목록을 가져와서 HTML에 추가하는 함수
-        async function loadQuizList() {
-            try {
-                const response = await fetch('/api/quiz'); // 백엔드에서 Quiz 목록을 가져오는 API endpoint
-                const quizList = await response.json();
+  <div class="header">
+    <h1>JUNGLE TMI - 퀴즈 리스트</h1>
+  </div>
 
-                const quizListContainer = document.getElementById('quizList');
+  <div class="buttons-container">
+    <button class="button" onclick="location.href='../'">돌아가기</button>
+    <button class="button challenge-button" onclick="location.href='/quizgenerator'">출제</button>
+  </div>
 
-                // Quiz 목록을 돌면서 각각의 Quiz에 대한 도전 버튼을 생성
-                quizList.forEach(quiz => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `<strong>${quiz.title}</strong> - ${quiz.description} `;
-                    
-                    const challengeButton = document.createElement('button');
-                    challengeButton.textContent = '도전하기';
-                    challengeButton.addEventListener('click', () => startChallenge(quiz.id));
+  <div class="additional-buttons">
+    <button class="button-inactive">새 퀴즈</button>
+    <button class="button" onclick="location.href='/list/solved'">푼 퀴즈</button>
+    <button class="button" onclick="location.href='/list/my'">낸 퀴즈</button>
+  </div>
 
-                    li.appendChild(challengeButton);
-                    quizListContainer.appendChild(li);
-                });
-            } catch (error) {
-                console.error('Error loading quiz list:', error);
-            }
-        }
+  <!-- Jinja2 활용 -->
+  {% for quiz in quiz_list %}
 
-        // 퀴즈 도전 버튼을 누를 때의 동작을 정의하는 함수
-        function startChallenge(quizId) {
-            // 도전 버튼을 누를 때의 동작을 여기에 추가
-            alert(`도전을 시작합니다! Quiz ID: ${quizId}`);
-        }
+  <div class="box">
+    <h2>#{{ quiz['id'] + 1 }}</h2>
+    <p><img class="profile-image" src={{ quiz['img_src'] }} width="30" height="30"/>{{ quiz['submit_name'] }}님의 TMI</p>
+    <p>{{ quiz['submit_id'] }}</p>
+    <p>Q. {{ quiz['problem'] }}</p>
+    <p>정답률 {{ quiz['correct_ratio'] }}%</p>
+    <form action="/quiz" method="POST">
+      <input type="hidden" name="quiz_id" value={{ quiz['id'] }} />
+      <input class="button challenge-button" type="submit" value="도전하기" />
+    </form>
+  </div>
 
-        // 페이지 로드 시 Quiz 목록을 가져오는 함수 호출
-        window.addEventListener('load', loadQuizList);
-    </script>
+  {% endfor %}
+
+  <!-- 표시할 퀴즈가 없는 경우 메시지 표시 -->
+  {% if no_quiz_to_show %}
+  <h2>모든 퀴즈를 푸셨습니다!</h1>
+    {% endif %}
+
 </body>
+
 </html>

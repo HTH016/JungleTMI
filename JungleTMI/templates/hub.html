@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>허브페이지 - JUNGLE TMI</title>
+    <title>JUNGLE TMI - 허브 페이지</title>
     <style>
         body {
             margin: 0;
@@ -12,7 +12,7 @@
             align-items: center;
             justify-content: flex-start;
             height: 100vh;
-            background-color:beige
+            background-color: beige;
         }
 
         h1 {
@@ -27,7 +27,6 @@
             margin: 20px 0;
         }
 
-        
         button {
             width: 150px; 
             height: 100px; 
@@ -39,7 +38,6 @@
             cursor: pointer;
         }
 
-
         .leaderboard {
             width: 300px;
             padding: 20px;
@@ -47,38 +45,90 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             margin: 20px 0; 
-            background-color:azure;
+            background-color: azure;
+            text-align: center;
+        }
+
+        .leaderboard-entry {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        
+        .logout-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 100px;
+            height: 40px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .profile_image {
         }
     </style>
 </head>
 <body>
-    <h1>JUNGLE TMI</h1>
-
-    <div class="menu-bar">
-        <button onclick="location.href='/logout'">로그아웃</button>
-    </div>
-
+    <h1>JUNGLE TMI - 허브 페이지</h1>
+    <h5>{{ user_name }}님 - {{ user_point }}P</h5>
 
     <div class="hub-buttons">
-        <button onclick="startQuiz()">출제</button>
-        <button onclick="guess()">맞추기</button>
+        <button onclick="location.href='/quizgenerator'">TMI 문제 내기</button>
+        <button onclick="location.href='/list'">TMI 맞추기</button>
     </div>
 
     <div class="leaderboard">
         <h2>리더보드</h2>
         
+        <div class="leaderboard-entry">
+            <span>1등</span>
+            <img class="profile-image" src={{ first_place['img_src'] }} width="30" height="30"/>
+            <span>{{ first_place['name'] }}</span>
+            <span>{{ first_place['id'] }}</span>
+            <span>{{ first_place['point'] }}</span>
+        </div>
+        <div class="leaderboard-entry">
+            <span>2등</span>
+            <img class="profile-image" src={{ second_place['img_src'] }} width="30" height="30"/>
+            <span>{{ second_place['name'] }}</span>
+            <span>{{ second_place['id'] }}</span>
+            <span>{{ second_place['point'] }}</span>
+        </div>
+        <div class="leaderboard-entry">
+            <span>3등</span>
+            <img class="profile-image" src={{ third_place['img_src'] }} width="30" height="30"/>
+            <span>{{ third_place['name'] }}</span>
+            <span>{{ third_place['id'] }}</span>
+            <span>{{ third_place['point'] }}</span>
+        </div>
     </div>
 
-    <script>
-        function startQuiz() {//백엔드에서 수정
-           
-            window.location.href="/quizgenerator"
-        }
+    <!-- 로그아웃 버튼 추가 -->
+    <button class="logout-button" onclick="location.href='/logout'">로그아웃</button>
 
-        function guess() {
-            
-            alert("맞추기 버튼이 클릭되었습니다.");
-        }
+    <script>
+        // function startQuiz() {
+        //     alert("출제 버튼이 클릭되었습니다.");
+        // }
+
+        // function guess() {
+        //     alert("맞추기 버튼이 클릭되었습니다.");
+        // }
+
+       
+        // function logout() {
+        //     alert("로그아웃 버튼이 클릭되었습니다.");
+        //     // 실제 로그아웃 로직을 여기에 추가할 수 있어.
+        // }
     </script>
 </body>
 </html>

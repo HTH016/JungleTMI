@@ -3,22 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>출제 페이지 - JUNGLE TMI</title>
+
+    <!-- jQuery 를 포함합니다. -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <title>JUNGLE TMI - 출제 페이지</title>
     <style>
         body {
             margin: 0;
             display: flex;
             flex-direction: column;
-            justify-content: center;/* 수평 방향 */
-            align-items:center;/* 수직 방향 */
+            justify-content: center;
+            align-items:center;
             height: 100vh;
             background-color: beige;
         }
 
         h1 {
             font-size: 50px;
-            color: #008000;
-            margin: 20px 0;
+            color: #008000; 
+            margin-bottom: 20px;
         }
 
         .question-input {
@@ -33,6 +37,7 @@
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
+            justify-content: space-around; /* 중앙 정렬 */
         }
 
         .option-container {
@@ -64,67 +69,189 @@
             cursor: pointer;
             margin-top: 20px;
         }
+
+        .back-button {
+            background-color: #008000; /* 초록색으로 변경 */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            padding: 10px;
+            margin: 10px;
+            position: absolute; /* 절대 위치로 설정 */
+            top: 10px; /* 위쪽 여백 */
+            left: 10px; /* 왼쪽 여백 */
+        }
     </style>
+
+    <script>
+        function submitQuiz() {
+            // option_num = $('#quiz_form').val()
+            var questionInput = document.querySelector('.question-input').value;
+            var option1 = document.querySelector('#option-description-1').value;
+            var option2 = document.querySelector('#option-description-2').value;
+            var option3 = document.querySelector('#option-description-3').value;
+            var option4 = document.querySelector('#option-description-4').value;
+            // var radioInputs = document.querySelectorAll('.radio-input');
+            var option_num = $('input[name="option"]:checked').val()
+
+            if (validateSignupForm()) {
+                // var cur_form = $('#quiz_form')
+
+                $.ajax({
+                    type: "POST",
+                    url: "/quizsubmit",
+                    data: {
+                        'quiz_content': questionInput,
+                        'quiz_choice_1': option1,
+                        'quiz_choice_2': option2,
+                        'quiz_choice_3': option3,
+                        'quiz_choice_4': option4,
+                        'option': option_num
+                    },
+
+                    success: function (response) {
+                        if (response['result'] == 'success') {
+                            alert("TMI 출제 성공!")
+                            window.location.href = '/'
+                        } else if (response['reason'] == 'over_limit') {
+                            alert("당일 출제 한도를 초과하셨습니다.")
+                        } else {
+                            alert("오류가 발생했습니다.")
+                        }
+                    }
+                });
+
+                $('#submit_button').remove()
+            }
+        }
+    </script>
 </head>
 <body>
     <h1>JUNGLE TMI - 출제 페이지</h1>
 
-    <textarea class="question-input" placeholder="질문을 입력하세요..."></textarea>
+    <button class="back-button"onclick="location.href='/'">돌아가기</button>
 
-    <div class="options-container">
-        <div class="option-container">
-            <textarea class="option-description" placeholder="보기 1 설명"></textarea>
-            <input type="radio" name="option" class="radio-input">
-        </div>
-        <div class="option-container">
-            <textarea class="option-description" placeholder="보기 2 설명"></textarea>
-            <input type="radio" name="option" class="radio-input">
-        </div>
-        <div class="option-container">
-            <textarea class="option-description" placeholder="보기 3 설명"></textarea>
-            <input type="radio" name="option" class="radio-input">
-        </div>
-        <div class="option-container">
-            <textarea class="option-description" placeholder="보기 4 설명"></textarea>
-            <input type="radio" name="option" class="radio-input">
-        </div>
-    </div>
+    <form id="quiz_form">
+        <textarea class="question-input" name="quiz_content" placeholder="질문을 입력하세요..."></textarea>
 
-    <button class="submit-button" onclick="submitQuestion()">제출</button>
+        <div class="options-container">
+            <div class="option-container">
+                <textarea class="option-description" id="option-description-1" name="quiz_choice_1" placeholder="보기 1 설명"></textarea>
+                <input type="radio" name="option" class="radio-input" value="0">
+            </div>
+            <div class="option-container">
+                <textarea class="option-description" id="option-description-2" name="quiz_choice_2" placeholder="보기 2 설명"></textarea>
+                <input type="radio" name="option" class="radio-input" value="1">
+            </div>
+            <div class="option-container">
+                <textarea class="option-description" id="option-description-3" name="quiz_choice_3" placeholder="보기 3 설명"></textarea>
+                <input type="radio" name="option" class="radio-input" value="2">
+            </div>
+            <div class="option-container">
+                <textarea class="option-description" id="option-description-4" name="quiz_choice_4" placeholder="보기 4 설명"></textarea>
+                <input type="radio" name="option" class="radio-input" value="3">
+            </div>
+        </div>
+    </form>
+
+    <!-- <form action="/quizsubmit" method="post" onsubmit="return validateSignupForm()">
+        <textarea class="question-input" name="quiz_content" placeholder="질문을 입력하세요..."></textarea>
+
+        <div class="options-container">
+            <div class="option-container">
+                <textarea class="option-description" id="option-description-1" name="quiz_choice_1" placeholder="보기 1 설명"></textarea>
+                <input type="radio" name="option" class="radio-input" value="0">
+            </div>
+            <div class="option-container">
+                <textarea class="option-description" id="option-description-2" name="quiz_choice_2" placeholder="보기 2 설명"></textarea>
+                <input type="radio" name="option" class="radio-input" value="1">
+            </div>
+            <div class="option-container">
+                <textarea class="option-description" id="option-description-3" name="quiz_choice_3" placeholder="보기 3 설명"></textarea>
+                <input type="radio" name="option" class="radio-input" value="2">
+            </div>
+            <div class="option-container">
+                <textarea class="option-description" id="option-description-4" name="quiz_choice_4" placeholder="보기 4 설명"></textarea>
+                <input type="radio" name="option" class="radio-input" value="3">
+            </div>
+        </div>
+
+    <button class="submit-button" type="submit">제출</button>
+    </form> -->
+    <button class="submit-button" onclick='submitQuiz()'>제출</button>
 
     <script>
-        async function submitQuestion() {
-            const questionInput = document.querySelector('.question-input').value;
-            const options = document.querySelectorAll('.option-description');
-    
-            if (!questionInput || !options || !options.length) {
-                alert("질문과 보기를 모두 채워주세요.");
-                return;
-            }
-    
-            const data = {
-                question: questionInput,
-                options: Array.from(options).map(option => option.value)
-            };
-    
-            try {
-                const response = await fetch('/api/submit_question', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                });
-    
-                if (response.ok) {
-                    alert("문제가 성공적으로 제출되었습니다.");
-                } else {
-                    alert("문제 제출에 실패했습니다.");
-                }
-            } catch (error) {
-                console.error('Error submitting question:', error);
-            }
+        // function goBack() {
+        //     // 여기에 돌아가기에 대한 동작 추가
+        // }
+
+        function validateSignupForm() {
+            var questionInput = document.querySelector('.question-input').value;
+            var option1 = document.querySelector('#option-description-1').value;
+            var option2 = document.querySelector('#option-description-2').value;
+            var option3 = document.querySelector('#option-description-3').value;
+            var option4 = document.querySelector('#option-description-4').value;
+            var radioInputs = document.querySelectorAll('.radio-input');
+
+            if (!questionInput) {
+                alert("질문을 입력해주세요!")
+                return false;
+            } else if (!option1 || !option2 || !option3 || !option4) {
+                alert("보기를 모두 입력해주세요!")
+                return false;
+            } else if (!Array.from(radioInputs).some(input => input.checked)) {
+                alert("정답을 선택해주세요!")
+                return false;
+            } else 
+                return true;
+
         }
+
+        // async function submitQuestion() {
+        //     val questionInput = document.querySelector('.question-input').value;
+        //     val option1 = document.querySelector('#option-description-1').value;
+        //     val option2 = document.querySelector('#option-description-2').value;
+        //     val option3 = document.querySelector('#option-description-3').value;
+        //     val option4 = document.querySelector('#option-description-4').value;
+        //     val radioInputs = document.querySelectorAll('.radio-input');
+
+        //     if (!questionInput) {
+        //         alert("질문을 입력해주세요!")
+        //         return false;
+        //     } else if (!option1 || !option2 || !option3 || !option4) {
+        //         alert("보기를 모두 입력해주세요!")
+        //         return false;
+        //     } else if (!Array.from(radioInputs).some(input => input.checked)) {
+        //         alert("정답을 선택해주세요!")
+        //         return false;
+        //     } else 
+        //         return true;
+
+        //     const data = {
+        //         question: questionInput,
+        //         options: [option1, option2, option3, option4],
+        //         correctAnswer: Array.from(radioInputs).find(input => input.checked).value
+        //     };
+
+        //     try {
+        //         const response = await fetch('/api/submit_question', {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Content-Type': 'application/json'
+        //             },
+        //             body: JSON.stringify(data)
+        //         });
+    
+        //         if (response.ok) {
+        //             alert("문제가 성공적으로 제출되었습니다.");
+        //         } else {
+        //             alert("문제 제출에 실패했습니다.");
+        //         }
+        //     } catch (error) {
+        //         console.error('Error submitting question:', error);
+        //     }
+        // }
     </script>
     
 </body>

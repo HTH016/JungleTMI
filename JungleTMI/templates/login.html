@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- jQuery 를 포함합니다. -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
     <title>로그인 페이지</title>
     <style>
         body {
@@ -12,28 +17,28 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
-            background-color:beige;
+            background-color: beige;
         }
-        
+
         h1 {
             font-size: 60px;
             color: #057e05;
             margin-bottom: 20px;
         }
 
-        form {
+        #login_form {
             width: 300px;
             padding: 20px;
             border: 1px solid #ccc;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px; 
-            background-color:white;
+            margin-bottom: 20px;
+            background-color: white;
         }
 
         h2 {
             text-align: center;
-            margin-bottom: 20px; 
+            margin-bottom: 20px;
         }
 
         label {
@@ -67,17 +72,56 @@
             text-decoration: none;
         }
     </style>
+    <script>
+        function tryLogin() {
+            if (validateLoginForm()) {
+                var username = document.getElementById('username').value;
+                var password = document.getElementById('password').value;
+
+                $.ajax({
+                    type: "POST",
+                    url: "/login",
+                    data: {
+                        'username': username,
+                        'password': password,
+                    },
+
+                    success: function (response) {
+                        if (response['result'] == 'success') {
+                            window.location.href = '/'
+                        } else if (response['reason'] == 'no_id') {
+                            alert("존재하지 않는 아이디입니다.")
+                        } else if (response['reason'] == 'wrong_password') {
+                            alert("패스워드가 일치하지 않습니다.")
+                        } else {
+                            alert("오류가 발생했습니다.")
+                        }
+                    }
+                });
+            }
+        }
+    </script>
 </head>
+
 <body>
     <h1>JUNGLE TMI</h1>
-    <form action="/login" method="post" onsubmit="return validateLoginForm()">
+    <div id="login_form">
+        <h2>로그인</h2>
+        <label for="username">아이디:</label>
+        <input type="text" id="username" name="username" required>
+        <label for="password">비밀번호:</label>
+        <input type="password" id="password" name="password" required>
+        <button onclick='tryLogin()'>Login</button>
+    </div>
+
+    <!-- <form action="/login" method="post" onsubmit="return validateLoginForm()">
         <h2>로그인</h2>
         <label for="username">아이디:</label>
         <input type="text" id="username" name="username" required>
         <label for="password">비밀번호:</label>
         <input type="password" id="password" name="password" required>
         <button type="submit">Login</button>
-    </form>
+    </form> -->
 
     <p>계정이 없으신가요? <a href="/signup">회원가입</a></p>
 
@@ -87,17 +131,18 @@
             var password = document.getElementById('password').value;
 
             if (username === "") {
-                alert("Please enter your username.");
-                return false;
-            }
-            else if (password === "") {
-                alert("Please enter your password.");
+                alert("아이디를 입력해주세요.");
                 return false;
             }
 
-            else
-                return true;
+            if (password === "") {
+                alert("비밀번호를 입력해주세요.");
+                return false;
+            }
+
+            return true;
         }
     </script>
 </body>
+
 </html>
