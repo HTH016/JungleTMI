@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,7 +19,36 @@
         h1 {
             font-size: 50px;
             color: #008000;
-            margin: 20px 0; 
+            margin: 20px 0;
+        }
+
+        .name-plate {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+            margin: 50px 0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+            background-color: white;
+        }
+
+        .name-tag {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 0px;
+        }
+
+        .name-tag h3 {
+            margin: 0;
+        }
+
+        .name-tag h5 {
+            color: darkgrey;
+            margin: 0 0 0 2px;
         }
 
         .hub-buttons {
@@ -27,9 +57,10 @@
             margin: 20px 0;
         }
 
-        button {
-            width: 150px; 
-            height: 100px; 
+        .hub-buttons button {
+            font-size: large;
+            width: 150px;
+            height: 100px;
             padding: 10px;
             background-color: #4CAF50;
             color: white;
@@ -44,7 +75,7 @@
             border: 1px solid #ccc;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin: 20px 0; 
+            margin: 20px 0;
             background-color: azure;
             text-align: center;
         }
@@ -58,28 +89,52 @@
             border-radius: 4px;
         }
 
-        
-        .logout-button {
-            position: absolute;
+
+        .top-button {
+            /* position: absolute;
             top: 10px;
-            right: 10px;
+            right: 10px; */
+            /* float: right; */
             width: 100px;
             height: 40px;
             padding: 10px;
-            background-color: #4CAF50;
+            background-color: #008000;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
         }
 
-        .profile_image {
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            width: 95%;
+            padding: 10px;
         }
     </style>
 </head>
+
 <body>
-    <h1>JUNGLE TMI - 허브 페이지</h1>
-    <h5>{{ user_name }}님 - {{ user_point }}P</h5>
+    <!-- 로그아웃 버튼 추가 -->
+    <div class="top-bar">
+        <button class="top-button" onclick="location.href='/logout'">로그아웃</button>
+    </div>
+
+
+    <h1>JUNGLE TMI</h1>
+
+    <div class="name-plate">
+        <img class="profile-image" src={{ user_img }} width="65" height="65" />
+        <div class="name-tag">
+            <h3>정글러 {{ user_name }}님</h3>
+            <h5>{{ user_id }}</h5>
+            <h3>{{ user_point }}P</h3>
+        </div>
+    </div>
+
+
+    <!-- <h5>{{ user_name }}님 - {{ user_point }}P</h5> -->
 
     <div class="hub-buttons">
         <button onclick="location.href='/quizgenerator'">TMI 문제 내기</button>
@@ -88,47 +143,29 @@
 
     <div class="leaderboard">
         <h2>리더보드</h2>
-        
+
         <div class="leaderboard-entry">
             <span>1등</span>
-            <img class="profile-image" src={{ first_place['img_src'] }} width="30" height="30"/>
+            <img class="profile-image" src={{ first_place['img_src'] }} width="30" height="30" />
             <span>{{ first_place['name'] }}</span>
             <span>{{ first_place['id'] }}</span>
             <span>{{ first_place['point'] }}</span>
         </div>
         <div class="leaderboard-entry">
             <span>2등</span>
-            <img class="profile-image" src={{ second_place['img_src'] }} width="30" height="30"/>
+            <img class="profile-image" src={{ second_place['img_src'] }} width="30" height="30" />
             <span>{{ second_place['name'] }}</span>
             <span>{{ second_place['id'] }}</span>
             <span>{{ second_place['point'] }}</span>
         </div>
         <div class="leaderboard-entry">
             <span>3등</span>
-            <img class="profile-image" src={{ third_place['img_src'] }} width="30" height="30"/>
+            <img class="profile-image" src={{ third_place['img_src'] }} width="30" height="30" />
             <span>{{ third_place['name'] }}</span>
             <span>{{ third_place['id'] }}</span>
             <span>{{ third_place['point'] }}</span>
         </div>
     </div>
-
-    <!-- 로그아웃 버튼 추가 -->
-    <button class="logout-button" onclick="location.href='/logout'">로그아웃</button>
-
-    <script>
-        // function startQuiz() {
-        //     alert("출제 버튼이 클릭되었습니다.");
-        // }
-
-        // function guess() {
-        //     alert("맞추기 버튼이 클릭되었습니다.");
-        // }
-
-       
-        // function logout() {
-        //     alert("로그아웃 버튼이 클릭되었습니다.");
-        //     // 실제 로그아웃 로직을 여기에 추가할 수 있어.
-        // }
-    </script>
 </body>
+
 </html>

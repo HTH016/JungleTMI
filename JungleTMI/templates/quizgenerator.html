@@ -25,8 +25,15 @@
             margin-bottom: 20px;
         }
 
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 500px;
+        }
+
         .question-input {
-            width: 80%;
+            width: 100%;
             height: 100px;
             padding: 10px;
             margin: 20px 0;
@@ -35,22 +42,27 @@
 
         .options-container {
             display: flex;
-            flex-wrap: wrap;
+            flex-direction: column;
+            width: 400px;
+            /* flex-wrap: wrap; */
             gap: 10px;
-            justify-content: space-around; /* 중앙 정렬 */
+            background-color: white;
+            /* justify-content: space-around; 중앙 정렬 */
         }
 
         .option-container {
-            width: calc(50% - 5px);
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            /* width: calc(50% - 5px); */
             padding: 10px;
             box-sizing: border-box;
         }
 
         .option-description {
             width: 100%;
-            height: 50px;
+            height: 40px;
             padding: 10px; 
-            margin-bottom: 10px;
             box-sizing: border-box;
         }
 
@@ -70,17 +82,27 @@
             margin-top: 20px;
         }
 
-        .back-button {
-            background-color: #008000; /* 초록색으로 변경 */
+        .top-button {
+            /* position: absolute;
+            top: 10px;
+            right: 10px; */
+            /* float: right; */
+            width: 100px;
+            height: 40px;
+            padding: 10px;
+            background-color: #008000;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+        }
+
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            width: 95%;
             padding: 10px;
-            margin: 10px;
-            position: absolute; /* 절대 위치로 설정 */
-            top: 10px; /* 위쪽 여백 */
-            left: 10px; /* 왼쪽 여백 */
         }
     </style>
 
@@ -128,29 +150,34 @@
     </script>
 </head>
 <body>
-    <h1>JUNGLE TMI - 출제 페이지</h1>
+    <div class="top-bar">
+        <button class="top-button" onclick="location.href='../'">돌아가기</button>
+    </div>
 
-    <button class="back-button"onclick="location.href='/'">돌아가기</button>
+    <h1>JUNGLE TMI</h1>
+    <h2>나의 TMI 출제하기</h2>
 
-    <form id="quiz_form">
+    <!-- <button class="back-button"onclick="location.href='/'">돌아가기</button> -->
+
+    <form class="input-container" id="quiz_form">
         <textarea class="question-input" name="quiz_content" placeholder="질문을 입력하세요..."></textarea>
 
         <div class="options-container">
             <div class="option-container">
-                <textarea class="option-description" id="option-description-1" name="quiz_choice_1" placeholder="보기 1 설명"></textarea>
                 <input type="radio" name="option" class="radio-input" value="0">
+                <textarea class="option-description" id="option-description-1" name="quiz_choice_1" placeholder="보기 1 설명"></textarea>
             </div>
             <div class="option-container">
-                <textarea class="option-description" id="option-description-2" name="quiz_choice_2" placeholder="보기 2 설명"></textarea>
                 <input type="radio" name="option" class="radio-input" value="1">
+                <textarea class="option-description" id="option-description-2" name="quiz_choice_2" placeholder="보기 2 설명"></textarea>
             </div>
             <div class="option-container">
-                <textarea class="option-description" id="option-description-3" name="quiz_choice_3" placeholder="보기 3 설명"></textarea>
                 <input type="radio" name="option" class="radio-input" value="2">
+                <textarea class="option-description" id="option-description-3" name="quiz_choice_3" placeholder="보기 3 설명"></textarea>
             </div>
             <div class="option-container">
-                <textarea class="option-description" id="option-description-4" name="quiz_choice_4" placeholder="보기 4 설명"></textarea>
                 <input type="radio" name="option" class="radio-input" value="3">
+                <textarea class="option-description" id="option-description-4" name="quiz_choice_4" placeholder="보기 4 설명"></textarea>
             </div>
         </div>
     </form>

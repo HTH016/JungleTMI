@@ -30,7 +30,9 @@ def main():
         # 사용자명 세션에서 추출
         user = db.users.find_one({'id':member_id})
         user_name = user['name']
+        user_id = user['id']
         user_point = user['point']
+        user_img = user['img_src']
 
         # DB에서 리더보드 추출하는 함수
         # first_place = {'name':'테스터', 'point':1500}
@@ -38,7 +40,7 @@ def main():
         # third_place = {'name':'테스터3', 'point':1000}
         leaderboard = getLeaderBoard()
 
-        return render_template('hub.html', user_name=user_name, user_point=user_point, first_place=leaderboard[0], second_place=leaderboard[1], third_place=leaderboard[2])
+        return render_template('hub.html', user_img=user_img, user_name=user_name, user_id=user_id, user_point=user_point, first_place=leaderboard[0], second_place=leaderboard[1], third_place=leaderboard[2])
     else:
         return render_template('login.html')
 
@@ -266,6 +268,8 @@ def newQuizList():
     
     quiz_list = getNewQuizList(user)
 
+    print(quiz_list)
+
     if len(quiz_list) == 0:
         # 풀 퀴즈가 하나도 없는 경우
         no_quiz_to_show = True
@@ -305,6 +309,10 @@ def solvedQuizList():
 def myQuizList():
     member_id = session['member_id']
     user = db.users.find_one({'id':member_id})
+    user_name = user['name']
+    user_id = user['id']
+    user_point = user['point']
+    user_img = user['img_src']
 
     quiz_list = getMyQuizList(user)
 
@@ -321,7 +329,7 @@ def myQuizList():
     # print(quiz_list)
     
 
-    return render_template('quizListMy.html', quiz_list=quiz_list, no_quiz_to_show=no_quiz_to_show)
+    return render_template('quizListMy.html', user_name=user_name, user_img=user_img, user_id=user_id, quiz_list=quiz_list, no_quiz_to_show=no_quiz_to_show)
     # return render_template('quizList.html', quiz_list=quiz_list, no_quiz_to_show= (len(quiz_list) == 0) )
 
 

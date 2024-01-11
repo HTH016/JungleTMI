@@ -61,6 +61,7 @@
         .question-container {
             width: 80%;
             padding: 20px;
+            max-width: 500px;
             box-sizing: border-box;
             border: 1px solid #ccc;
             border-radius: 4px;
@@ -80,6 +81,7 @@
         .options-container {
             display: flex;
             flex-wrap: wrap;
+            max-width: 400px;
             gap: 10px;
             background-color: white;
             margin-bottom: 10px;
@@ -105,7 +107,31 @@
             margin-top: -5px;
             /* 수정: radio input을 조금 위로 올림 */
         }
+
+        .top-button {
+            /* position: absolute;
+            top: 10px;
+            right: 10px; */
+            /* float: right; */
+            width: 100px;
+            height: 40px;
+            padding: 10px;
+            background-color: #008000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            width: 95%;
+            padding: 10px;
+        }
     </style>
+
 
     <script>
         function solveQuiz() {
@@ -146,11 +172,15 @@
 </head>
 
 <body>
-    <h1>JUNGLE TMI - 퀴즈 페이지</h1>
-
-    <div class="button-container">
-        <button class="action-button" onclick="location.href='../list'">돌아가기</button>
+    <div class="top-bar">
+        <button class="top-button" onclick="location.href='../'">돌아가기</button>
     </div>
+
+    <h1>JUNGLE TMI</h1>
+
+    <!-- <div class="button-container">
+        <button class="action-button" onclick="location.href='../list'">돌아가기</button>
+    </div> -->
 
 
     <h1 id="quiz_id_temp" style="display:none">{{ quiz['id'] }}</h1>
@@ -165,28 +195,28 @@
 
     <form class="options-container" id="quiz_form">
         <div class="option-container">
-            <span class="option-description">{{ quiz['option0'] }}</span>
             <input type="radio" class="radio-input" id="option1" name="quiz_ans" value=0>
+            <span class="option-description">{{ quiz['option0'] }}</span>
         </div>
         <div class="option-container">
-            <span class="option-description">{{ quiz['option1'] }}</span>
             <input type="radio" class="radio-input" id="option1" name="quiz_ans" value=1>
+            <span class="option-description">{{ quiz['option1'] }}</span>
         </div>
         <div class="option-container">
-            <span class="option-description">{{ quiz['option2'] }}</span>
             <input type="radio" class="radio-input" id="option1" name="quiz_ans" value=2>
+            <span class="option-description">{{ quiz['option2'] }}</span>
         </div>
         <div class="option-container">
-            <span class="option-description">{{ quiz['option3'] }}</span>
             <input type="radio" class="radio-input" id="option1" name="quiz_ans" value=3>
+            <span class="option-description">{{ quiz['option3'] }}</span>
         </div>
     </form>
 
-        <div class="button-container">
-            <button class="action-button submit-button" id="submit_button" onclick='solveQuiz()'>제출하기</button>
-        </div>
+    <div class="button-container">
+        <button class="action-button submit-button" id="submit_button" onclick='solveQuiz()'>제출하기</button>
+    </div>
 
-        <!-- <script>
+    <!-- <script>
         function goBack() {
             alert("돌아가기 버튼이 클릭되었습니다.");
             // 여기에 돌아가기에 대한 동작 추가
